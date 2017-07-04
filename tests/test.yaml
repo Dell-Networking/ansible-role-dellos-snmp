@@ -1,0 +1,5 @@
+---
+- hosts: datacenter
+  remote_user: local
+  roles:
+    - Dell-Networking.dellos-snmp

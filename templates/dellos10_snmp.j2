@@ -1,0 +1,49 @@
+#jinja2: trim_blocks: True,lstrip_blocks: True
+{#############################################
+
+Purpose:
+Configure snmp commands for dellos10 Devices
+
+dellos_snmp:
+    snmp_contact:  test
+    snmp_location: Chennai
+    snmp_community:
+      - name: public
+        access_mode: ro
+        state: present
+
+###############################################}
+{% if dellos_snmp is defined and dellos_snmp %}
+{% for key,value in dellos_snmp.iteritems() %}
+  {% if key == "snmp_contact" %}
+    {% if value %}
+snmp-server contact {{ value }}
+    {% else %}
+no snmp-server contact
+    {% endif %}
+
+  {% elif key == "snmp_location" %}
+    {% if value  %}
+snmp-server location {{ value }}
+    {% else %}
+no snmp-server location
+    {% endif %}
+
+  {% elif key == "snmp_community" %}
+    {% if value %}
+      {% for item in value %}
+        {% if item.name is defined and item.name %}
+          {% if item.state is defined and item.state == "absent" %}
+no snmp-server community {{ item.name }}
+          {% else %}
+            {% if item.access_mode is defined and item.access_mode %}
+snmp-server community {{ item.name }} {{ item.access_mode }}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+  {% endif %}
+{% endfor %}
+{% endif %}
