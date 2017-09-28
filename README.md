@@ -21,11 +21,11 @@ Any role variable with a corresponding state variable set to absent negates the 
 | ``snmp_contact`` | string | Configures SNMP contact information. |
 | ``snmp_server_vrf`` | boolean: true, false* | Enables SNMP-SERVER VRF globally. |
 | ``snmp_location`` | string | Configures SNMP location information. |
-| ``snmp_community`` | list | Configures the SNMP community information (see snmp_community.* keys for each list item). |
+| ``snmp_community`` | list | Configures the SNMP community information (see ``snmp_community.*`` keys for each list item). |
 | ``snmp_community.name`` | string (required) | Configures the SNMP community string. |
 | ``snmp_community.access_mode`` | string, choice(ro, rw) | Configures the access mode for the community. |
 | ``snmp_community.state`` | string, choice(absent, present*) | If set to absent, deletes the SNMP community information. |
-| ``snmp_host`` | list | Configures SNMP hosts to receive SNMP traps (see snmp_host.* keys for each list item) — key is not supported for dellos10 devices. |
+| ``snmp_host`` | list | Configures SNMP hosts to receive SNMP traps (see ``snmp_host.*`` keys for each list item) — key is not supported for dellos10 devices. |
 | ``snmphost.ip`` | string | Configures IP address of the SNMP trap host in dellos6 devices. |
 | ``snmp_host.ipv4`` | string | Configures IPV4 address for the SNMP trap host in dellos9 devices. |
 | ``snmp_host.ipv6`` | string | Configures IPV6 address for the SNMP trap host in dellos9 devices. |
@@ -34,15 +34,15 @@ Any role variable with a corresponding state variable set to absent negates the 
 | ``snmp_host.version`` | string (required) | Specifies SNMP version of the host — it can be either 1 or 2c or 3 in dellos9 devices. |
 | ``snmp_host.vrf`` | list | Configures SNMP VRF traps for the SNMP host — specifies list of VRF names. |
 | ``snmp_host.state`` | string, choice(absent, present*) | If set to absent, deletes the SNMP trap host. |
-| ``snmp_traps`` | list | Configures SNMP traps (see snmp_traps.* keys for each list item) — key is not supported on dellos10 devices. |
+| ``snmp_traps`` | list | Configures SNMP traps (see ``snmp_traps.*`` keys for each list item) — key is not supported on dellos10 devices. |
 | ``snmp_traps.name`` | string | Enables SNMP traps. |
 | ``snmp_traps.state`` | string, choice(absent, present*) | If set to absent, deletes the SNMP trap. |
 | ``snmp_engine_id`` | string | Configures SNMPv3 engineID for the local agent — key is not supported on dellos6 and dellos10 devices. |
-| ``snmp_view`` | list | Configures SNMPv3 view information (see snmp_view.* keys for each list item) — key is not supported on dellos10 and dellos6 devices. |
+| ``snmp_view`` | list | Configures SNMPv3 view information (see ``snmp_view.*`` keys for each list item) — key is not supported on dellos10 and dellos6 devices. |
 | ``snmp_view.name`` | string | Configures view name — can be up to 20 characters maximum. |
 | ``snmp_view.oid_subtree`` | integer | Configures OID subtree for the view. |
 | ``snmp_view.include`` | boolean(true, false) | Specifies whether the MIB family has to be included or excluded from the view. |
-| ``snmp_user`` | list | Configures SNMP users for each group name (see snmp_user.* for each list item) — key is not supported on dellos6 and dellos10 devices. |
+| ``snmp_user`` | list | Configures SNMP users for each group name (see ``snmp_user.*`` for each list item) — key is not supported on dellos6 and dellos10 devices. |
 | ``snmp_user.name`` | string (required) | Configures SNMP user name. |
 | ``snmp_user.group_name`` | string(required) | Configures SNMP group name for the user. |
 | ``snmp_user.version`` | string, choice(1, 2c, 3) (required) | Configures user entry with the specified SNMP version — can be either 1 or 2c or 3 in dellos9 devices. |
@@ -53,7 +53,7 @@ Any role variable with a corresponding state variable set to absent negates the 
 | ``snmp_user.auth_algorithm`` | string, choice(md5, sha) | Configures authorization algorithm for the SNMP user. |
 | ``snmp_user.auth_pass`` | string | Configures authentication password for the user. |
 | ``snmp_user.state`` | string, choice(absent, present*) | If set to absent, deletes the SNMP user. |
-| ``snmp_group`` | list | Configures SNMP groups (see snmp_group.* for each list item) — key is not supported on dellos6 and dellos10 devices. |
+| ``snmp_group`` | list | Configures SNMP groups (see ``snmp_group.*`` for each list item) — key is not supported on dellos6 and dellos10 devices. |
 | ``snmp_group.name`` | string (required) | Configures SNMP group name. |
 | ``snmp_group.version`` | string (required) | Configures group entry with the specified SNMP version — can be either 1 or 2c or 3 in dellos9 devices. |
 | ``snmp_group.access_list`` | dict | Configures access list entries for the group — if any of the fields are defined, it is required to configure or negate. |
@@ -63,7 +63,7 @@ Any role variable with a corresponding state variable set to absent negates the 
 | ``snmp_group.view.notify`` | string | Configures notify view associated with the group. |
 | ``snmp_group.view.read`` | string | Configures read view associated with the group. |
 | ``snmp_group.view.write`` | string | Configures write view associated with the group. |
-| ``snmp_group.context`` | list | Configures context list entries (see snmp_group.context.* for each list item). |
+| ``snmp_group.context`` | list | Configures context list entries (see ``snmp_group.context.*`` for each list item). |
 | ``snmp_group.context.context_name`` | string | Configures snmp-group entries with specified context name. |
 | ``snmp_group.context.access_list`` | dict | Configures access list entries for the group with context. |
 | ``snmp_group.context.access_list.access`` | string | Configures access-list associated with the group. |
@@ -83,14 +83,14 @@ Ansible Dell EMC Networking roles require the following connection information t
 
 | Key | Required | Choices | Description |
 | -- | -- | -- | -- |
-| host | yes | | Hostname or address for connecting to the remote device over the specified ``transport`` — value of this key is the destination address for the transport. |
-| port | no | | Port used to build the connection to the remote device — if the value of this key does not specify the value, the value defaults to 22 |
-| username | no | | Configures the username that authenticates the connection to the remote device. The value of this key authenticates the CLI login. If this key does not specify a value, the value of environment variable ANSIBLE_NET_USERNAME is used instead. |
-| password | no | | Specifies the password that authenticates the connection to the remote device. If this key does not specify the value, the value of environment variable ANSIBLE_NET_PASSWORD is used instead. |
-| authorize | no | yes, no*  | Instructs the module to enter Privileged mode on the remote device before sending commands. If this key does not specify the value, the value of environment variable ANSIBLE_NET_AUTHORIZE is used instead. If not specified, the device attempts to execute all commands in non-Privileged mode.|
-| auth_pass | no | | Specifies the password to use if required to enter Privileged mode on the remote device. If ``authorize`` is set to no, this key is not applicable. If this key does not specify the value, the value of environment variable ANSIBLE_NET_AUTH_PASS is used instead. |
-| transport | yes  | cli* | Configures the transport connection to use when connecting to the remote device. This key supports connectivity to the device over CLI (SSH).  |
-| provider | no |  | Convenient method that passes all of the above connection arguments as a dictonary object. All constraints (such as required, choices) must be met either by individual arguments or values in this dictonary. |
+| ``host`` | yes | | Hostname or address for connecting to the remote device over the specified ``transport`` — value of this key is the destination address for the transport. |
+| ``port`` | no | | Port used to build the connection to the remote device — if the value of this key does not specify the value, the value defaults to 22. |
+| ``username`` | no | | Configures the username that authenticates the connection to the remote device. The value of this key authenticates the CLI login. If this key does not specify a value, the value of ``ANSIBLE_NET_USERNAME`` is used instead. |
+| ``password`` | no | | Specifies the password that authenticates the connection to the remote device. If this key does not specify the value, the value of ``ANSIBLE_NET_PASSWORD`` is used instead. |
+| ``authorize`` | no | yes, no*  | Instructs the module to enter Privileged mode on the remote device before sending commands. If this key does not specify the value, the value of ``ANSIBLE_NET_AUTHORIZE`` is used instead. If not specified, the device attempts to execute all commands in non-Privileged mode.|
+| ``auth_pass`` | no | | Specifies the password to use if required to enter Privileged mode on the remote device. If ``authorize`` is set to no, this key is not applicable. If this key does not specify the value, the value of ``ANSIBLE_NET_AUTH_PASS`` is used instead. |
+| ``transport`` | yes  | cli* | Configures the transport connection to use when connecting to the remote device. This key supports connectivity to the device over CLI (SSH).  |
+| ``provider`` | no |  | Convenient method that passes all of the above connection arguments as a dictonary object. All constraints (such as required, choices) must be met either by individual arguments or values in this dictonary. |
 
 > **NOTE**: Asterisk (*) denotes the default value if none is specified.
 
@@ -98,7 +98,7 @@ Ansible Dell EMC Networking roles require the following connection information t
 The ``dellos-snmp`` role is built on modules included in the core Ansible code, version 2.2.0.
 
 ## Example playbook
-The following example uses the dellos.dellos-snmp role to completely set up the SNMP server attributes. The example creates a ``hosts`` file with the switch details and corresponding variables. It writes a simple playbook that only references the dellos-snmp role. 
+This example uses the dellos.dellos-snmp role to completely set up the SNMP server attributes. The example creates a ``hosts`` file with the switch details and corresponding variables. It writes a simple playbook that only references the dellos-snmp role. 
 
 > **NOTE**: You automatically get access to all tasks to configure SNMP features by including this role.
 
