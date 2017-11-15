@@ -11,6 +11,19 @@ dellos_snmp:
       - name: public
         access_mode: ro
         state: present
+    snmp_traps: 
+      - name: all
+        state: present
+    snmp_host:
+      - ip: 1.1.1.1
+        communitystring: c1
+        version: "2c"
+        udpport: 4
+        state: present
+      - ip: 2.2.2.2
+        version: 1
+        communitystring: c3
+        state: present
 
 ###############################################}
 {% if dellos_snmp is defined and dellos_snmp %}
@@ -44,6 +57,48 @@ snmp-server community {{ item.name }} {{ item.access_mode }}
       {% endfor %}
     {% endif %}
 
+  {% elif key == "snmp_traps" %}
+    {% if value %}
+      {% for val in value %}
+        {% if val.name is defined and val.name %}
+          {% if val.state is defined and val.state == "absent" %}
+no snmp-server enable traps {{ val.name }}
+          {% else %}
+            {% if val.name == "all" %}
+              {% set trap_list = ['lldp','snmp authentication','snmp linkdown','snmp linkup','envmon fan','envmon power-supply','envmon temperature'] %}
+              {% for name in trap_list %}
+snmp-server enable traps {{ name }}
+              {% endfor %}
+            {% else %}
+snmp-server enable traps {{ val.name }}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+   
+  {% elif key == "snmp_host" and value %}
+    {% for item in value %}
+      {% if item.ip is defined and item.ip %}
+        {% if item.version is defined and item.version == 1 or item.version == "2c" %}
+          {% if item.communitystring is defined and item.communitystring %}
+            {% if item.udpport is defined and item.udpport %}
+              {% set my_val = "traps version "+item.version|string+" "+item.communitystring+" udp-port "+item.udpport|string %}
+            {% else %}
+              {% set my_val = "traps version "+item.version|string+" "+item.communitystring %}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+        {% if my_val is defined and my_val %}
+          {% if item.state is defined and item.state == "absent" %}
+no snmp-server host {{ item.ip }} {{ my_val }}
+          {% else %}
+snmp-server host {{ item.ip }} {{ my_val }}
+          {% endif %}
+        {% endif %}
+        {% set my_val = "" %}
+      {% endif %}
+    {% endfor%}
   {% endif %}
 {% endfor %}
 {% endif %}

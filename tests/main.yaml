@@ -93,7 +93,9 @@ dellos_snmp:
       - name: private
         access_mode: rw
         state: absent
-    snmp_traps: all
+    snmp_traps: 
+      - name: all
+        state: present
     snmp_host:
       - ip: 4.4.4.4
         communitystring: public
@@ -108,3 +110,17 @@ dellos_snmp:
       - name: public
         access_mode: ro
         state: present
+    snmp_traps: 
+      - name: all
+        state: present
+    snmp_host:
+      - ip: 1.1.1.1
+        communitystring: c1
+        version: "2c"
+        udpport: 4
+        state: present
+      - ip: 2.2.2.2
+        version: 1
+        communitystring: c3
+        state: present
+

@@ -14,7 +14,9 @@ dellos_snmp:
       - name: private
         access_mode: rw
         state: absent
-    snmp_traps: all
+    snmp_traps: 
+      - name: all
+        state: present
     snmp_host:
       - ip: 4.4.4.4
         communitystring: public
