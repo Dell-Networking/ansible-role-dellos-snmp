@@ -62,10 +62,17 @@ snmp-server community {{ item.name }} {{ item.access_mode }}
       {% for val in value %}
         {% if val.name is defined and val.name %}
           {% if val.state is defined and val.state == "absent" %}
+            {% if val.name == "all" %}
+              {% set trap_list = ['snmp authentication','snmp linkdown','snmp linkup','envmon fan','envmon power-supply','envmon temperature'] %}
+              {% for name in trap_list %}
+no snmp-server enable traps {{ name }}
+              {% endfor %}
+            {% else %}
 no snmp-server enable traps {{ val.name }}
+            {% endif %}
           {% else %}
             {% if val.name == "all" %}
-              {% set trap_list = ['lldp','snmp authentication','snmp linkdown','snmp linkup','envmon fan','envmon power-supply','envmon temperature'] %}
+              {% set trap_list = ['snmp authentication','snmp linkdown','snmp linkup','envmon fan','envmon power-supply','envmon temperature'] %}
               {% for name in trap_list %}
 snmp-server enable traps {{ name }}
               {% endfor %}
