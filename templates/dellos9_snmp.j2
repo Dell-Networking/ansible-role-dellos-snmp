@@ -93,7 +93,7 @@ dellos_snmp:
 {% if dellos_snmp is defined and dellos_snmp %}
 
 {% if dellos_snmp %}
-{% for key,value in dellos_snmp.iteritems() %}
+{% for key,value in dellos_snmp.items() %}
   {% if key == "snmp_contact" %}
     {% if value %}
 snmp-server contact {{ value }}
