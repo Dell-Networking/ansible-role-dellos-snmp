@@ -1,9 +1,7 @@
 #jinja2: trim_blocks: True,lstrip_blocks: True
 {#############################################
-
 Purpose:
 Configure snmp commands for dellos10 Devices
-
 dellos_snmp:
     snmp_contact:  test
     snmp_location: Chennai
@@ -24,7 +22,6 @@ dellos_snmp:
         version: 1
         communitystring: c3
         state: present
-
 ###############################################}
 {% if dellos_snmp is defined and dellos_snmp %}
 {% for key,value in dellos_snmp.iteritems() %}

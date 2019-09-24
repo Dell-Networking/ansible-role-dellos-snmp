@@ -1,9 +1,7 @@
 #jinja2: trim_blocks: True,lstrip_blocks: True
 {####################################
-
 Purpose:
 Configure snmp commands for dellos6 Devices
-
 dellos_snmp:
     snmp_contact:  test
     snmp_location: Chennai
@@ -22,7 +20,6 @@ dellos_snmp:
         communitystring: public
         udpport: 1
         state: absent
-
 #####################################}
 {% if dellos_snmp is defined and dellos_snmp %}
 

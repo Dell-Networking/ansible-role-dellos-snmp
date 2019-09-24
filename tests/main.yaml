@@ -1,6 +1,5 @@
 ---
 # vars file for Dell-Networking.dellos-snmp, below gives a sample configuration
- 
 # Sample variables for dellos9 device
 dellos_snmp:
     snmp_contact:  test
@@ -123,4 +122,3 @@ dellos_snmp:
         version: 1
         communitystring: c3
         state: present
-
