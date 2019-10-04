@@ -1,0 +1,21 @@
+---
+# vars file for Dell-Networking.dellos-snmp, below gives a sample configuration
+# Sample variables for dellos6 device
+dellos_snmp:
+    snmp_contact:  test
+    snmp_location: Chennai
+    snmp_community:
+      - name: public
+        access_mode: ro
+        delete: False
+      - name: private
+        access_mode: rw
+        state: absent
+    snmp_traps: 
+      - name: all
+        state: present
+    snmp_host:
+      - ip: 4.4.4.4
+        communitystring: public
+        udpport: 1
+        state: absent
