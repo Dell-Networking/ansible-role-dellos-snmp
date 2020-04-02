@@ -43,10 +43,10 @@ Role variables
 | ``snmp_traps.name`` | string | Enables SNMP traps   | dellos6, dellos9, dellos10 |
 | ``snmp_traps.state`` | string: absent,present\* | Deletes the SNMP trap if set to absent | dellos6, dellos9, dellos10 |
 | ``snmp_engine_id`` | string | Configures the SNMPv3 engineID for the local agent | dellos9 |
-| ``snmp_view`` | list | Configures SNMPv3 view information (see ``snmp_view.*``) | dellos9 |
-| ``snmp_view.name`` | string | Configures the SNMP view name (20 characters maximum) | dellos9 |
-| ``snmp_view.oid_subtree`` | integer | Configures the SNMP view for the OID subtree | dellos9 |
-| ``snmp_view.include`` | boolean: true,false | Specifies whether the MIB family should be included or excluded from the view | dellos9 |
+| ``snmp_view`` | list | Configures SNMPv3 view information (see ``snmp_view.*``) | dellos9, dellos10 |
+| ``snmp_view.name`` | string | Configures the SNMP view name (20 characters maximum) | dellos9, dellos10 |
+| ``snmp_view.oid_subtree`` | integer | Configures the SNMP view for the OID subtree | dellos9, dellos10 |
+| ``snmp_view.include`` | boolean: true,false | Specifies whether the MIB family should be included or excluded from the view | dellos9, dellos10 |
 | ``snmp_user``      | list | Configures SNMP users for each group name (see ``snmp_user.*``) | dellos9 |
 | ``snmp_user.name`` | string (required) | Configures the SNMP user name | dellos9 |
 | ``snmp_user.group_name`` | string (required) | Configures the SNMP group name for the user | dellos9 |
@@ -80,7 +80,7 @@ Role variables
 | ``snmp_group.context.state`` | string: absent,present | Deletes the context entries with the group if set to absent | dellos9 |
 | ``snmp_group.state`` | string: absent,present\* | Deletes the associated SNMP group if set to absent | dellos9 |
 
-> **NOTE**: Asterisk (\*) denotes the default value if none is specified. 
+> **NOTE**: Asterisk (\*) denotes the default value if none is specified.
 
 Connection variables
 --------------------
@@ -108,13 +108,13 @@ The *dellos-snmp* role is built on modules included in the core Ansible code. Th
 Example playbook
 ----------------
 
-This example uses the *dellos.dellos-snmp* role to completely set up the SNMP server attributes. It creates a *hosts* file with the switch details and corresponding variables. The hosts file should define the *ansible_network_os* variable with corresponding Dell EMC networking OS name. 
+This example uses the *dellos.dellos-snmp* role to completely set up the SNMP server attributes. It creates a *hosts* file with the switch details and corresponding variables. The hosts file should define the *ansible_network_os* variable with corresponding Dell EMC networking OS name.
 
-When *dellos_cfg_generate* is set to true, the variable generates the configuration commands as a .part file in *build_dir* path. By default, the variable is set to false. It writes a simple playbook that only references the *dellos-snmp* role. By including the role, you automatically get access to all of the tasks to configure SNMP features. 
+When *dellos_cfg_generate* is set to true, the variable generates the configuration commands as a .part file in *build_dir* path. By default, the variable is set to false. It writes a simple playbook that only references the *dellos-snmp* role. By including the role, you automatically get access to all of the tasks to configure SNMP features.
 
 **Sample hosts file**
- 
-    leaf1 ansible_host= <ip_address> 
+
+    leaf1 ansible_host= <ip_address>
 
 **Sample host_vars/leaf1**
 
@@ -126,7 +126,7 @@ When *dellos_cfg_generate* is set to true, the variable generates the configurat
     ansible_ssh_pass: xxxxx
     ansible_network_os: dellos9
     build_dir: ../temp/dellos9
-	  
+
     dellos_snmp:
       snmp_contact:  test
       snmp_location: chennai
@@ -186,7 +186,7 @@ When *dellos_cfg_generate* is set to true, the variable generates the configurat
                 access: a1
               view:
                 read: r1
-              state: present 
+              state: present
           state: present
 
 **Simple playbook to setup snmp - leaf.yaml**
