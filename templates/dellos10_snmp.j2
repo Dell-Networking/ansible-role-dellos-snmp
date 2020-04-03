@@ -17,6 +17,43 @@ dellos_snmp:
         oid_subtree: 2
         include: true
         state: absent
+    snmp_user:
+      - name: user_1
+        group_name: grp1
+        auth_algorithm: md5
+        auth_pass: 12345678
+        version: 3
+        priv_algorithm: aes
+        priv_pass: 12345678
+        access_list:
+          access: a2
+        state: present
+      - name: user_2
+        group_name: grp2
+        version: "2c"
+        access_list:
+          access: a2
+        state: absent
+    snmp_group:
+      - name: group_1
+        version: 2c
+        access_list:
+          access: a1
+        view:
+          read: r1
+          write: w1
+          notify: n1
+        state: present
+      - name: group_2
+        version: 3
+        security_level: auth
+        access_list:
+          access: a1
+        view:
+          read: r1
+          write: w1
+          notify: n1
+        state: present
     snmp_host:
       - ip: 1.1.1.1
         communitystring: c1
@@ -106,6 +143,108 @@ snmp-server view {{ item.name }} {{ item.oid_subtree }} excluded
         {% endif %}
       {% endfor %}
     {% endif %}
+
+    {% elif key == "snmp_user" %}
+      {% if value %}
+        {% for item in value %}
+          {% if item.name is defined and item.name %}
+            {% if item.group_name is defined and item.group_name %}
+              {% if item.version is defined and item.version == "2c" or item.version == 1 %}
+                {% if item.state is defined and item.state == "absent" %}
+  no snmp-server user {{ item.name }} {{ item.group_name }} {{ item.version|string }}
+                {% else %}
+                  {% if item.access_list is defined and item.access_list %}
+                    {% if item.access_list.access is defined and item.access_list.access %}
+  snmp-server user {{ item.name }} {{ item.group_name }} {{ item.version|string }} access {{ item.access_list.access }}
+                    {% endif %}
+                  {% else %}
+  snmp-server user {{ item.name }} {{ item.group_name }} {{ item.version|string }}
+                  {% endif %}
+                {% endif %}
+              {% elif item.version is defined and item.version == 3 %}
+                {% if item.state is defined and item.state == "absent" %}
+  no snmp-server user {{ item.name }} {{ item.group_name }} 3
+                {% else %}
+                  {% if item.access_list is defined and item.access_list %}
+                    {% if item.auth_algorithm is defined and item.auth_algorithm and item.auth_pass is defined and item.auth_pass and item.priv_algorithm is defined and item.priv_algorithm and item.priv_pass is defined and item.priv_pass and item.access_list.access is defined and item.access_list.access %}
+  snmp-server user {{ item.name }} {{ item.group_name }} 3 auth {{ item.auth_algorithm }} {{ item.auth_pass }} priv {{ item.priv_algorithm }} {{ item.priv_pass }} access {{ item.access_list.access }}
+					          {% elif item.auth_algorithm is defined and item.auth_algorithm and item.auth_pass is defined and item.auth_pass and item.access_list.access is defined and item.access_list.access %}
+  snmp-server user {{ item.name }} {{ item.group_name }} 3 auth {{ item.auth_algorithm }} {{ item.auth_pass }} access {{ item.access_list.access }}
+                    {% elif item.access_list.access is defined and item.access_list.access %}
+  snmp-server user {{ item.name }} {{ item.group_name }} 3 access {{ item.access_list.access }}
+                    {% endif %}
+				          {% else %}
+                    {% if item.auth_algorithm is defined and item.auth_algorithm and item.auth_pass is defined and item.auth_pass and item.priv_algorithm is defined and item.priv_algorithm and item.priv_pass is defined and item.priv_pass %}
+  snmp-server user {{ item.name }} {{ item.group_name }} 3 auth {{ item.auth_algorithm }} {{ item.auth_pass }} priv {{ item.priv_algorithm }} {{ item.priv_pass }}
+                    {% elif item.auth_algorithm is defined and item.auth_algorithm and item.auth_pass is defined and item.auth_pass %}
+  snmp-server user {{ item.name }} {{ item.group_name }} 3 auth {{ item.auth_algorithm }} {{ item.auth_pass }}
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+  {% elif key == "snmp_group" and value %}
+    {% for item in value %}
+      {% if item.name is defined and item.name %}
+        {% if item.version is defined and item.version == "2c" or item.version == 1 %}
+          {% set my_version = item.version|string %}
+        {% elif item.version is defined and item.version == 3 %}
+          {% if item.security_level is defined and item.security_level %}
+          {% set my_version = "3"+" "+item.security_level %}
+          {% endif %}
+        {% endif %}
+        {% if item.access_list is defined and item.access_list and item.view is defined and item.view %}
+          {% if item.access_list.access is defined and item.access_list.access and item.view.notify is defined and item.view.notify and item.view.read is defined and item.view.read and item.view.write is defined and item.view.write %}
+            {% set my_en = "access "+item.access_list.access+" notify "+item.view.notify+" read "+item.view.read+" write "+item.view.write %}
+          {% elif item.access_list.access is defined and item.access_list.access and item.view.notify is defined and item.view.notify and item.view.read is defined and item.view.read %}
+            {% set my_en = "access "+item.access_list.access+" notify "+item.view.notify+" read "+item.view.read %}
+          {% elif item.access_list.access is defined and item.access_list.access and item.view.read is defined and item.view.read and item.view.write is defined and item.view.write %}
+            {% set my_en = "access "+item.access_list.access+" read "+item.view.read+" write "+item.view.write %}
+          {% elif item.access_list.access is defined and item.access_list.access and item.view.notify is defined and item.view.notify and item.view.write is defined and item.view.write %}
+            {% set my_en = "access "+item.access_list.access+" notify "+item.view.notify+" write "+item.view.write %}
+          {% elif item.access_list.access is defined and item.access_list.access and item.view.notify is defined and item.view.notify %}
+            {% set my_en = "access "+item.access_list.access+" notify "+item.view.notify %}
+          {% elif item.access_list.access is defined and item.access_list.access and item.view.read is defined and item.view.read %}
+            {% set my_en = "access "+item.access_list.access+" read "+item.view.read %}
+          {% elif item.access_list.access is defined and item.access_list.access and item.view.write is defined and item.view.write %}
+            {% set my_en = "access "+item.access_list.access+" write "+item.view.write %}
+          {% endif %}
+        {% elif item.access_list is defined and item.access_list %}
+          {% if item.access_list.access is defined and item.access_list.access %}
+            {% set my_en = "access "+item.access_list.access %}
+          {% endif %}
+        {% elif item.view is defined and item.view %}
+          {% if item.view.notify is defined and item.view.notify and item.view.read is defined and item.view.read and item.view.write is defined and item.view.write %}
+            {% set my_en = "notify "+item.view.notify+" read "+item.view.read+" write "+item.view.write %}
+          {% elif item.view.notify is defined and item.view.notify and item.view.read is defined and item.view.read %}
+            {% set my_en = "notify "+item.view.notify+" read "+item.view.read %}
+          {% elif item.view.notify is defined and item.view.notify and item.view.write is defined and item.view.write %}
+             {% set my_en ="notify "+item.view.notify+" write "+item.view.write %}
+          {% elif item.view.read is defined and item.view.read and item.view.write is defined and item.view.write %}
+             {% set my_en = "read "+item.view.read+" write "+item.view.write %}
+          {% elif item.view.read is defined and item.view.read %}
+             {% set my_en = "read "+item.view.read %}
+          {% elif item.view.notify is defined and item.view.notify %}
+             {% set my_en = "notify "+item.view.notify %}
+          {% elif item.view.write is defined and item.view.write %}
+             {% set my_en = "write "+item.view.write %}
+          {% endif %}
+        {% endif %}
+        {% if item.state is defined and item.state == "absent" %}
+no snmp-server group {{ item.name }} {{ my_version }}
+        {% else %}
+          {% if my_en is defined and my_en %}
+snmp-server group {{ item.name }} {{ my_version }} {{ my_en }}
+          {% else %}
+snmp-server group {{ item.name }} {{ my_version }}
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
   {% elif key == "snmp_host" and value %}
     {% for item in value %}
