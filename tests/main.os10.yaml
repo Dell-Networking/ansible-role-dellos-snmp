@@ -15,7 +15,44 @@ dellos_snmp:
       - name: view_1
         oid_subtree: 2
         include: false
-        state: absent        
+        state: absent
+    snmp_user:
+      - name: user_1
+        group_name: grp1
+        auth_algorithm: md5
+        auth_pass: 12345678
+        version: 3
+        priv_algorithm: aes
+        priv_pass: 12345678
+        access_list:
+          access: a2
+        state: present
+      - name: user_2
+        group_name: grp2
+        version: "2c"
+        access_list:
+          access: a2
+        state: absent
+    snmp_group:
+      - name: group_1
+        version: 2c
+        access_list:
+          access: a1
+        view:
+          read: r1
+          write: w1
+          notify: n1
+        state: present
+      - name: group_2
+        version: 3
+        security_level: auth
+        access_list:
+          access: a1
+        view:
+          read: r1
+          write: w1
+          notify: n1
+        state: present
     snmp_host:
       - ip: 1.1.1.1
         communitystring: c1

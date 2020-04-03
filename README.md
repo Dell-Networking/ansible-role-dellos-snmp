@@ -48,26 +48,28 @@ Role variables
 | ``snmp_view.oid_subtree`` | integer | Configures the SNMP view for the OID subtree | dellos9, dellos10 |
 | ``snmp_view.include`` | boolean: true,false | Specifies whether the MIB family should be included or excluded from the view | dellos9, dellos10 |
 | ``snmp_user``      | list | Configures SNMP users for each group name (see ``snmp_user.*``) | dellos9 |
-| ``snmp_user.name`` | string (required) | Configures the SNMP user name | dellos9 |
-| ``snmp_user.group_name`` | string (required) | Configures the SNMP group name for the user | dellos9 |
-| ``snmp_user.version`` | string: 1,2c,3 (required) | Configures a user entry with the specified SNMP version (either 1 or 2c or 3) | dellos9 |
-| ``snmp_user.access_list`` | dictionary | Configures access-list details; required to configure or negate if defined | dellos9 |
-| ``snmp_user.access_list.access`` | string | Configures the access-list associated with the user | dellos9 |
+| ``snmp_user.name`` | string (required) | Configures the SNMP user name | dellos9, dellos10 |
+| ``snmp_user.group_name`` | string (required) | Configures the SNMP group name for the user | dellos9, dellos10 |
+| ``snmp_user.version`` | string: 1,2c,3 (required) | Configures a user entry with the specified SNMP version (either 1 or 2c or 3) | dellos9, dellos10 |
+| ``snmp_user.access_list`` | dictionary | Configures access-list details; required to configure or negate if defined | dellos9, dellos10 |
+| ``snmp_user.access_list.access`` | string | Configures the access-list associated with the user | dellos9, dellos10 |
 | ``snmp_user.access_list.ipv6`` | string | Configures the IPv6 access-list associated with the user | dellos9 |
 | ``snmp_user.encryption`` | boolean: true,false\* | Specifies the encryption for the SNMP user if set to true | dellos9 |
-| ``snmp_user.auth_algorithm`` | string: md5,sha | Configures the authorization algorithm for the SNMP user | dellos9 |
-| ``snmp_user.auth_pass`` | string | Configures the authentication password for the user  | dellos9 |
-| ``snmp_user.state`` | string: absent,present\* | Deletes the SNMP user if set to absent | dellos9 |
-| ``snmp_group``      | list | Configures SNMP groups (see ``snmp_group.*``) | dellos9  |
-| ``snmp_group.name`` | string (required) | Configures the SNMP group name | dellos9 |
-| ``snmp_group.version`` | string (required) | Configures the group entry with the specified SNMP version (either 1 or 2c or 3) | dellos9 |
-| ``snmp_group.access_list`` | dict | Configures access-list entries for the group; required to configure or negate if defined | dellos9 |
-| ``snmp_group.access_list.access`` | string | Configures the access-list associated with the group | dellos9 |
+| ``snmp_user.auth_algorithm`` | string: md5,sha | Configures the authorization algorithm for the SNMP user | dellos9, dellos10 |
+| ``snmp_user.auth_pass`` | string | Configures the authentication password for the user  | dellos9, dellos10 |
+| ``snmp_user.priv_algorithm`` | string: aes,des | Configures the encryption algorithm for the SNMP user | dellos10 |
+| ``snmp_user.priv_pass`` | string | Configures the encryption password for the user  | dellos10 |
+| ``snmp_user.state`` | string: absent,present\* | Deletes the SNMP user if set to absent | dellos9, dellos10 |
+| ``snmp_group``      | list | Configures SNMP groups (see ``snmp_group.*``) | dellos9, dellos10  |
+| ``snmp_group.name`` | string (required) | Configures the SNMP group name | dellos9, dellos10 |
+| ``snmp_group.version`` | string (required) | Configures the group entry with the specified SNMP version (either 1 or 2c or 3) | dellos9, dellos10 |
+| ``snmp_group.access_list`` | dict | Configures access-list entries for the group; required to configure or negate if defined | dellos9, dellos10 |
+| ``snmp_group.access_list.access`` | string | Configures the access-list associated with the group | dellos9, dellos10 |
 | ``snmp_group.access_list.ipv6`` | string | Configures the IPv6 access-list associated with the group | dellos9 |
-| ``snmp_group.view`` | dict | Configures view entries for the group; required to configure or negate if defined | dellos9 |
-| ``snmp_group.view.notify`` | string | Configures notify view associated with the group | dellos9 |
-| ``snmp_group.view.read`` | string | Configures read view associated with the group | dellos9 |
-| ``snmp_group.view.write`` | string | Configures write view associated with the group | dellos9 |
+| ``snmp_group.view`` | dict | Configures view entries for the group; required to configure or negate if defined | dellos9, dellos10 |
+| ``snmp_group.view.notify`` | string | Configures notify view associated with the group | dellos9, dellos10 |
+| ``snmp_group.view.read`` | string | Configures read view associated with the group | dellos9, dellos10 |
+| ``snmp_group.view.write`` | string | Configures write view associated with the group | dellos9, dellos10 |
 | ``snmp_group.context`` | list | Configures context list entries (see ``snmp_group.context.*``) | dellos9 |
 | ``snmp_group.context.context_name`` | string | Configures SNMP-group entries with specified context name | dellos9 |
 | ``snmp_group.context.access_list`` | dictionary | Configures access-list entries for the group with context | dellos9 |
@@ -78,7 +80,7 @@ Role variables
 | ``snmp_group.context.view.read`` | string | Configures read view associated with the group | dellos9 |
 | ``snmp_group.context.view.write`` | string | Configures write view associated with the group | dellos9 |
 | ``snmp_group.context.state`` | string: absent,present | Deletes the context entries with the group if set to absent | dellos9 |
-| ``snmp_group.state`` | string: absent,present\* | Deletes the associated SNMP group if set to absent | dellos9 |
+| ``snmp_group.state`` | string: absent,present\* | Deletes the associated SNMP group if set to absent | dellos9, dellos10 |
 
 > **NOTE**: Asterisk (\*) denotes the default value if none is specified.
 
@@ -164,6 +166,8 @@ When *dellos_cfg_generate* is set to true, the variable generates the configurat
           encryption: true
           auth_algorithm: md5
           auth_pass: 12345678
+          priv_algorithm: aes
+          priv_pass: 12345678
           state: present
       snmp_group:
         - name: group_1
@@ -178,6 +182,8 @@ When *dellos_cfg_generate* is set to true, the variable generates the configurat
           access_list:
             access: a1
             ipv6: ip1
+          view:
+            read: r2
           context:
             - context_name: c1
               state: present
